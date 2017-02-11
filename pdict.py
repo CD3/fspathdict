@@ -16,11 +16,11 @@ class pdict(collections.MutableMapping):
   def __getitem__(self, key):
     key = str(key)
 
-    # strip off trailing '/' if it exists
-    if key.endswith(self.delimiter):
-      key = key[:-len(self.delimiter)]
+    # return self for blank keys or None
+    if key == "" or key is None:
+      return self
 
-    # root node is referenced
+    # check if path is absolute
     if key.startswith(self.delimiter):
       node = self
       while node.parent != None:
@@ -31,7 +31,6 @@ class pdict(collections.MutableMapping):
     toks = key.split(self.delimiter,1)
     head = toks[0]
     tail = None if len(toks) < 2 else toks[1]
-
 
     if head == self.pup:
       # first path element references parent

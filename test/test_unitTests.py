@@ -101,6 +101,9 @@ def test_paths():
   assert d['grid']['x']['../'].path() == '/grid'
   assert d['grid']['x']['../../grid'].path() == '/grid'
 
+  assert d['grid']['/.'] == d
+  assert d['grid']['/'] == d
+
   assert d.pathname("grid/x") == 'grid'
   assert d.pathname("/grid/x") == '/grid'
   assert d.pathname("/x") == ''
