@@ -7,6 +7,7 @@ class pdict(collections.MutableMapping):
     self.parent = None
     self.store = dict()
     self.update(dict(*args, **kwargs))  # use the free update to set keys
+    self.recursive_convert()
 
     self.delimiter = '/'
     self.pup = '..'
@@ -32,8 +33,6 @@ class pdict(collections.MutableMapping):
         head = int(head)
       return self.store[head] if tail is None else self.store[head][tail]
 
-
-
   def __setitem__(self, key, value):
 
     # if value is a dict, convert it to a pdict
@@ -44,13 +43,15 @@ class pdict(collections.MutableMapping):
     
     if isinstance(value,pdict):
       value.parent = self
-      # recursively convert any nested dict's to pdict's
-      for k in (value.store if isinstance(value.store,dict) else [i for i,v in enumerate(value.store)]):
-        if isinstance(value[k], (dict,list)):
-          value[k] = value.store[k]
+      value.recursive_convert()
 
     self.store[key] = value
 
+  def recursive_convert(self):
+    # recursively convert any nested dict's to pdict's
+    for k in (self.store if isinstance(self.store,dict) else [i for i,v in enumerate(self.store)]):
+      if isinstance(self[k], (dict,list)):
+        self[k] = self.store[k]
 
   def __delitem__(self, key):
     del self.store[key]
