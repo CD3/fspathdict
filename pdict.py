@@ -14,9 +14,11 @@ class pdict(collections.MutableMapping):
     self.phere  = '.'
 
   def __getitem__(self, key):
-
-    # split key into path elements
     key = str(key)
+
+    # strip off trailing '/' if it exists
+    if key.endswith(self.delimiter):
+      key = key[:-len(self.delimiter)]
 
     # root node is referenced
     if key.startswith(self.delimiter):
@@ -25,6 +27,7 @@ class pdict(collections.MutableMapping):
         node = node.parent
       return node[key[len(self.delimiter):]]
 
+    # split key into path elements
     toks = key.split(self.delimiter,1)
     head = toks[0]
     tail = None if len(toks) < 2 else toks[1]
@@ -44,17 +47,54 @@ class pdict(collections.MutableMapping):
       return self.store[head] if tail is None else self.store[head][tail]
 
   def __setitem__(self, key, value):
+    # if key is a path, we need to get the node that value will
+    # be added to first. we'll create parents as needed.
+    if isinstance(key,(str,unicode)):
+      # strip off trailing '/' if it exists
+      if key.endswith(self.delimiter):
+        key = key[:-len(self.delimiter)]
 
-    # if value is a dict, convert it to a pdict
+      # root node is referenced
+      if key.startswith(self.delimiter):
+        node = self
+        while node.parent != None:
+          node = node.parent
+        node[key[len(self.delimiter):]] = value
+        return
+
+      # split key into path elements
+      toks = key.split(self.delimiter,1)
+      head = toks[0]
+      tail = None if len(toks) < 2 else toks[1]
+
+      # key is a path 
+      if tail is not None:
+        if head not in self.store:
+          self.store[head] = pdict()
+          self.store[head].parent = self
+        self[head][tail] = value
+        return
+
+
+
+    # if value is a dict or list, convert it to a pdict
+    # this allows the user to initialize the pdict just like a regular dict
+    # i.e. d = { 'val' : 10, 'range' : [ 0, 10 ] }
     if isinstance(value,(dict,list)):
       newvalue = pdict()
       newvalue.store = value
+      newvalue.parent = self
       value = newvalue
     
+    # if value is a pdict, set
+    # its parent to this pdict and check
+    # to see if any of its elements need to be converted
+    # to pdicts
     if isinstance(value,pdict):
       value.parent = self
       value.recursive_convert()
 
+    # set the value
     self.store[key] = value
 
   def recursive_convert(self):
@@ -78,3 +118,17 @@ class pdict(collections.MutableMapping):
     if isinstance(self.store,list):
       return range(len(self.store))
     return None
+
+  def path(self):
+    p = []
+    while self.parent is not None:
+      if isinstance(self.parent.store,list):
+        p.append(  str(self.parent.store.index(self)) )
+      if isinstance(self.parent.store,dict):
+        #     vv search for ourself in parent
+        p += [k for k,v in self.parent.store.items() if v == self]
+      self = self.parent
+    p.append("")
+    p.reverse()
+    return self.delimiter.join(p)
+        

@@ -1,4 +1,4 @@
-import pytest
+import pytest,pprint
 from pdict import pdict
 
 def test_interface():
@@ -76,4 +76,22 @@ def test_interface():
   assert d['grid/x/min'] == 0
   assert d['grid/x/max'] == 1
   assert d['grid/x/n'] == 100
+
+  d = pdict()
+  d['grid/x/min'] = 0
+  d['grid/x']['max'] = 1
+  d['grid/x']['/grid/x/n'] = 100
+  d['grid/x']['/type'] = "sim"
+
+  assert d['grid']['x']['min'] == 0
+  assert d['grid']['x']['max'] == 1
+  assert d['grid']['x']['n'] == 100
+  assert d['type'] == 'sim'
+
+
+  assert d['grid']['x'].path() == '/grid/x'
+  assert d['grid']['x']['..'].path() == '/grid'
+  assert d['grid']['x']['../'].path() == '/grid'
+  assert d['grid']['x']['../../grid'].path() == '/grid'
+
 
