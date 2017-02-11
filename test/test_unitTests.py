@@ -89,9 +89,24 @@ def test_interface():
   assert d['type'] == 'sim'
 
 
+
+def test_paths():
+
+  d = pdict()
+
+  d.update( { 'type':'sim', 'grid' : { 'x' : { 'min' : 0, 'max' : 10, 'n' : 100 } } } )
+
   assert d['grid']['x'].path() == '/grid/x'
   assert d['grid']['x']['..'].path() == '/grid'
   assert d['grid']['x']['../'].path() == '/grid'
   assert d['grid']['x']['../../grid'].path() == '/grid'
 
+  assert d.pathname("grid/x") == 'grid'
+  assert d.pathname("/grid/x") == '/grid'
+  assert d.pathname("/x") == ''
+  assert d.pathname("x") == 'x'
 
+  assert d.basename("grid/x") == 'x'
+  assert d.basename("/grid/x") == 'x'
+  assert d.basename("/x") == 'x'
+  assert d.basename("x") == 'x'

@@ -97,12 +97,6 @@ class pdict(collections.MutableMapping):
     # set the value
     self.store[key] = value
 
-  def recursive_convert(self):
-    # recursively convert any nested dict's to pdict's
-    for k in (self.store if isinstance(self.store,dict) else [i for i,v in enumerate(self.store)]):
-      if isinstance(self[k], (dict,list)):
-        self[k] = self.store[k]
-
   def __delitem__(self, key):
     del self.store[key]
 
@@ -131,4 +125,22 @@ class pdict(collections.MutableMapping):
     p.append("")
     p.reverse()
     return self.delimiter.join(p)
+
+  def pathname(self,path):
+    toks = path.rsplit(self.delimiter,1)
+    return toks[0]
+
+  def basename(self,path):
+    toks = path.rsplit(self.delimiter,1)
+    if len(toks)>1:
+      return toks[1]
+    else:
+      return toks[0]
+
         
+  def recursive_convert(self):
+    # recursively convert any nested dict's to pdict's
+    for k in (self.store if isinstance(self.store,dict) else [i for i,v in enumerate(self.store)]):
+      if isinstance(self[k], (dict,list)):
+        self[k] = self.store[k]
+
