@@ -127,6 +127,14 @@ class pdict(collections.MutableMapping):
 
   def pathname(self,path):
     toks = path.rsplit(self.delimiter,1)
+    if len(toks) == 1:
+      # only one path element, like "x"
+      return ""
+    if toks[0] == "":
+      # if first token is empty, path was an absolute path with
+      # one element. like "/grid"
+      return "/"
+
     return toks[0]
 
   def basename(self,path):

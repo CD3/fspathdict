@@ -106,10 +106,10 @@ def test_paths():
 
   assert d.pathname("grid/x") == 'grid'
   assert d.pathname("/grid/x") == '/grid'
-  assert d.pathname("/x") == ''
-  assert d.pathname("x") == 'x'
+  assert d.pathname("x") == ''
+  assert d.pathname("/x") == '/'
 
   assert d.basename("grid/x") == 'x'
   assert d.basename("/grid/x") == 'x'
-  assert d.basename("/x") == 'x'
   assert d.basename("x") == 'x'
+  assert d.basename("/x") == 'x'
