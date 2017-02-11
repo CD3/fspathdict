@@ -14,11 +14,21 @@ class pdict(collections.MutableMapping):
     self.phere  = '.'
 
   def __getitem__(self, key):
+
     # split key into path elements
     key = str(key)
+
+    # root node is referenced
+    if key.startswith(self.delimiter):
+      node = self
+      while node.parent != None:
+        node = node.parent
+      return node[key[len(self.delimiter):]]
+
     toks = key.split(self.delimiter,1)
     head = toks[0]
     tail = None if len(toks) < 2 else toks[1]
+
 
     if head == self.pup:
       # first path element references parent

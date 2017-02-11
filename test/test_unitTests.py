@@ -61,6 +61,10 @@ def test_interface():
   assert d['grid/x']['../y/min'] == -1
   assert d['grid/x']['../y/max'] == 1
   assert d['grid/x']['../y/n'] == 200
+  assert d['grid/x']['/type'] == "plain"
+  assert d['grid/x']['/grid/y/min'] == -1
+  assert d['grid/x']['/grid/y/max'] == 1
+  assert d['grid/x']['/grid/y/n'] == 200
 
   d = pdict()
   d.update( {'grid' : { 'x' : { 'min' : 0, 'max' : 1, 'n' : 100 } } } )
