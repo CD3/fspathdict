@@ -61,3 +61,10 @@ class pdict(collections.MutableMapping):
 
   def __len__(self):
     return len(self.store)
+
+  def keys(self):
+    if isinstance(self.store,dict):
+      return self.store.keys()
+    if isinstance(self.store,list):
+      return range(len(self.store))
+    return None
