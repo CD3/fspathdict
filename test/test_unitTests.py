@@ -2,7 +2,6 @@ import pytest,pprint
 from pdict import pdict
 
 def test_interface():
-
   d = pdict()
 
   d['type'] = 'plain'
@@ -89,9 +88,46 @@ def test_interface():
   assert d['type'] == 'sim'
 
 
+def test_dict_conversions():
+  d = pdict()
+  d.update( { 'a' : { 'b' : { 'c' : { 'd' : 0 }, 'e' : [ 0, 1, 2, [10, 11, 12] ] } } } )
+
+  assert d['a/b/c/d'] == 0
+  assert d['a/b/e/0'] == 0
+  assert d['a/b/e/1'] == 1
+  assert d['a/b/e/2'] == 2
+  assert d['a/b/e/3/0'] == 10
+
+  assert type(d) == pdict
+  assert type(d['a']) == pdict
+  assert type(d['a/b']) == pdict
+  assert type(d['a/b/c']) == pdict
+  assert type(d['a/b/c/d']) == int
+  assert type(d['a/b/e']) == pdict
+  assert type(d['a/b/e/0']) == int
+  assert type(d['a/b/e/3']) == pdict
+  assert type(d['a/b/e/3/0']) == int
+
+  dd = d.dict()
+
+  assert dd['a']['b']['c']['d'] == 0
+  assert dd['a']['b']['e'][0] == 0
+  assert dd['a']['b']['e'][1] == 1
+  assert dd['a']['b']['e'][2] == 2
+  assert dd['a']['b']['e'][3][0] == 10
+
+  assert type(dd) == dict
+  assert type(dd['a']) == dict
+  assert type(dd['a']['b']) == dict
+  assert type(dd['a']['b']['c']) == dict
+  assert type(dd['a']['b']['c']['d']) == int
+  assert type(dd['a']['b']['e']) == list
+  assert type(dd['a']['b']['e'][0]) == int
+  assert type(dd['a']['b']['e'][3]) == list
+  assert type(dd['a']['b']['e'][3][0]) == int
+
 
 def test_paths():
-
   d = pdict()
 
   d.update( { 'type':'sim', 'grid' : { 'x' : { 'min' : 0, 'max' : 10, 'n' : 100 } } } )

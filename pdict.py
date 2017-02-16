@@ -144,6 +144,21 @@ class pdict(collections.MutableMapping):
     else:
       return toks[0]
 
+  def dict(self):
+    '''Return a nested dict.'''
+    store = dict() if isinstance(self.store,dict) else list()
+    for k in (self.store if isinstance(self.store,dict) else [i for i,v in enumerate(self.store)]):
+      v = self.store[k]
+      if isinstance(self.store[k], pdict):
+        v = v.dict()
+
+      if isinstance(store,list):
+        store.append(v)
+      else:
+        store[k] = v
+
+    return store
+
         
   def recursive_convert(self):
     # recursively convert any nested dict's to pdict's
