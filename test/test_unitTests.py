@@ -95,6 +95,18 @@ def test_dict_conversions():
   assert d['a/b/c/d'] == 0
   assert d['a/b/e/0'] == 0
   assert d['a/b/e/1'] == 1
+  e = pdict()
+  d.update( { 'a' : { 'b' : { 'c' : { 'd' : 0 }, 'e' : [ 0, 1, 2, [10, 11, 12] ] } } } )
+
+  assert d['a/b/c/d'] == 0
+  assert d['a/b/e/0'] == 0
+  assert d['a/b/e/1'] == 1
+  assert d['a/b/e/2'] == 2
+  assert d['a/b/e/3/0'] == 10
+  assert d['a/b/e/3/1'] == 11
+  assert d['a/b/e/3/2'] == 12
+
+  d
   assert d['a/b/e/2'] == 2
   assert d['a/b/e/3/0'] == 10
 
@@ -149,3 +161,37 @@ def test_paths():
   assert d.basename("/grid/x") == 'x'
   assert d.basename("x") == 'x'
   assert d.basename("/x") == 'x'
+
+def test_example():
+
+  config = pdict()
+  config.update( { 'desc' : "example config"
+                 , 'time' : { 'N' : 50
+                            , 'dt' : 0.01 }
+                 , 'grid' : { 'x' : { 'min' : 0
+                                    , 'max' : 0.5
+                                    , 'N' : 100 }
+                            , 'y' : { 'min' : 1
+                                    , 'max' : 1.5
+                                    , 'N' : 200 }
+                            }
+                 } )
+
+  # elements are accessed in the same was as a dict.
+  assert config['desc'] == "example config"
+  # sub-elements can also be accessed the same way.
+  assert config['grid']['x']['max'] == 0.5
+  # but they can also be accessed using a path.
+  assert config['grid/x/max'] == 0.5
+
+  # get a sub-element in the tree.
+  x = config['grid/x']
+
+  # again, elements of grid/x are accessed as normal.
+  assert x['max'] == 0.5
+  # but we can also access elements that are not in this branch.
+  assert x['../y/max'] == 1.5
+  # or reference elements from the root of the tree.
+  assert x['/time/N'] == 50
+
+  
