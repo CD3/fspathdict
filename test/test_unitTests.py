@@ -195,3 +195,32 @@ def test_example():
   assert x['/time/N'] == 50
 
   
+def test_get_method():
+  d = pdict()
+  d.update({ 'one': 1,
+        'level 1' : {'one' : 11, 'two': 12} })
+
+
+  assert d['one'] == 1
+  assert d['level 1/one'] == 11
+  assert d['level 1/two'] == 12
+
+  with pytest.raises(KeyError) as e:
+    x = d['two']
+
+  with pytest.raises(KeyError) as e:
+    x = d['level 1/three']
+
+  with pytest.raises(KeyError) as e:
+    x = d['level 2']
+
+  with pytest.raises(KeyError) as e:
+    x = d['level 2/one']
+
+  assert d.get('one',-1) == 1
+  assert d.get('level 1/one',-1) == 11
+  assert d.get('level 1/two',-1) == 12
+
+  assert d.get('two',-1) == -1
+  assert d.get('level 2',-1) == -1
+  assert d.get('level 2/one',-1) == -1
