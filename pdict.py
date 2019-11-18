@@ -1,5 +1,10 @@
 import collections
 
+try:
+  test = unicode()
+except:
+  unicode = str
+
 class pdict(collections.MutableMapping):
   """A dictionary that allows nested element access using key paths."""
 
