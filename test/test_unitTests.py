@@ -224,3 +224,16 @@ def test_get_method():
   assert d.get('two',-1) == -1
   assert d.get('level 2',-1) == -1
   assert d.get('level 2/one',-1) == -1
+
+
+def test_construct_from_dict():
+  d = pdict({ 'one': 1,
+        'level 1' : {'one' : 11, 'two': 12} })
+
+  assert d['one'] == 1
+  assert d['level 1/one'] == 11
+  assert d['level 1/two'] == 12
+
+
+
+

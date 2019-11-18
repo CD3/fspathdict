@@ -9,14 +9,14 @@ class pdict(collections.MutableMapping):
   """A dictionary that allows nested element access using key paths."""
 
   def __init__(self,*args,**kwargs):
+    self.delimiter = '/'
+    self.pup = '..'
+    self.phere  = '.'
+
     self.parent = None
     self.store = dict()
     self.update(dict(*args, **kwargs))  # use the free update to set keys
     self.recursive_convert()
-
-    self.delimiter = '/'
-    self.pup = '..'
-    self.phere  = '.'
 
   def __getitem__(self, key):
     key = str(key)
