@@ -37,3 +37,14 @@ assert x['../y/max'] == 1.5
 # or reference elements from the root of the tree.
 assert x['/time/N'] == 50
 ```
+
+## Install
+
+You can install the latest release with `pip`.
+```
+$ pip install fspath
+```
+Or, even better, using `pipenv`
+```
+$ pipenv install fspath
+```
