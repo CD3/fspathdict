@@ -1,5 +1,5 @@
 import pytest,pprint
-from pdict import pdict
+from fspathdict import pdict
 
 def test_interface():
   d = pdict()
