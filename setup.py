@@ -8,7 +8,7 @@ setup(
   author = 'CD Clark III',
   author_email = 'clifton.clark@gmail.com',
   url = 'https://github.com/CD3/fspathdict',
-  # download_url = 'https://github.com/CD3/fspathdict/archive/v_01.tar.gz',
+  download_url = 'https://github.com/CD3/fspathdict/archive/0.1.tar.gz',
   keywords = ['dict', 'tree', 'filesystem path'],
   classifiers=[
     'Development Status :: 3 - Alpha',
