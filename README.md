@@ -20,7 +20,7 @@ config.update( { 'desc' : "example config"
                           }
                } )
 
-# elements are accessed in the same was as a dict.
+# elements are accessed in the same way as a dict.
 assert config['desc'] == "example config"
 # sub-elements can also be accessed the same way.
 assert config['grid']['x']['max'] == 0.5
@@ -42,9 +42,9 @@ assert x['/time/N'] == 50
 
 You can install the latest release with `pip`.
 ```
-$ pip install fspath
+$ pip install fspathdict
 ```
 Or, even better, using `pipenv`
 ```
-$ pipenv install fspath
+$ pipenv install fspathdict
 ```
