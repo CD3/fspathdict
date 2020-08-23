@@ -1,5 +1,7 @@
 # FS Path Dictionary
 
+**DEPRECATED: This project is deprecated. Use `fspathtree` instead: https://github.com/CD3/fspathtree**
+
 A simple class to allow filesystem-style path access, including support for walking "up" the dict with '..'.
 
 Example:
